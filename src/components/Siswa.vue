@@ -26,7 +26,7 @@
               :headers="headers"
               :items="students"
               :search="search"
-              item-key="nis"
+              item-key="id"
             >
               <template slot="items" slot-scope="props">
                 <tr>
@@ -275,25 +275,23 @@
           }
         });
         var final_value = this.nilaiPerhitungan.catatan_pelanggaran + this.nilaiPerhitungan.kepribadian + this.nilaiPerhitungan.persentase_kehadiran + this.nilaiPerhitungan.penghasilan_ortu + this.nilaiPerhitungan.prestasi_akademik + this.nilaiPerhitungan.prestasi_non_akademik + this.nilaiPerhitungan.rerata_raport + this.nilaiPerhitungan.rerata_uas
-        // console.log(final_value)
         fb.alternativesCollection.add({
           final_value: final_value,
           student: fb.db.doc(`/students/${student_id}`)
         })
       },
       catatan_pelanggaran(bobot){
-        let x = 0
+        var x = 0
         if(this.newStudent.catatan_pelanggaran >= 75 && this.newStudent.catatan_pelanggaran <= 100){
           x = 0
-        } else if (this.newStudent.catatan_pelanggaran >= 50 && this.newStudent.catatan_pelanggaran <= 74){
+        } else if (this.newStudent.catatan_pelanggaran >= 50 && this.newStudent.catatan_pelanggaran < 75){
           x = 25
-        } else if (this.newStudent.catatan_pelanggaran >= 25 && this.newStudent.catatan_pelanggaran <= 49){
+        } else if (this.newStudent.catatan_pelanggaran >= 25 && this.newStudent.catatan_pelanggaran < 50){
           x = 75
         } else {
           x = 100
         }
         this.nilaiPerhitungan.catatan_pelanggaran = x * bobot / 100
-        console.log(this.nilaiPerhitungan.catatan_pelanggaran)
       },
       kepribadian(bobot){
         let x = 0
@@ -307,33 +305,30 @@
           x = 0
         }
         this.nilaiPerhitungan.kepribadian = x * bobot / 100
-        console.log(this.nilaiPerhitungan.kepribadian)
       },
       penghasilan_ortu(bobot){
         let x = 0
         if(this.newStudent.penghasilan_ortu > 10000000){
           x = 0
-        } else if (this.newStudent.penghasilan_ortu >= 5000000 && this.newStudent.penghasilan_ortu <= 10000000){
+        } else if (this.newStudent.penghasilan_ortu >= 5000000 && this.newStudent.penghasilan_ortu < 10000000){
           x = 25
-        } else if (this.newStudent.penghasilan_ortu >= 2000000 && this.newStudent.penghasilan_ortu <= 4999999){
+        } else if (this.newStudent.penghasilan_ortu >= 2000000 && this.newStudent.penghasilan_ortu < 5000000){
           x = 75
         } else {
           x = 100
         }
         this.nilaiPerhitungan.penghasilan_ortu = x * bobot / 100
-        console.log(this.nilaiPerhitungan.penghasilan_ortu)
       },
       persentase_kehadiran(bobot){
         let x = 0
         if(this.newStudent.persentase_kehadiran >= 95 && this.newStudent.persentase_kehadiran <= 100){
           x = 100
-        } else if (this.newStudent.persentase_kehadiran >= 80 && this.newStudent.persentase_kehadiran <= 94){
+        } else if (this.newStudent.persentase_kehadiran >= 80 && this.newStudent.persentase_kehadiran < 95){
           x = 50
         } else {
           x = 0
         }
         this.nilaiPerhitungan.persentase_kehadiran = x * bobot / 100
-        console.log(this.nilaiPerhitungan.persentase_kehadiran)
       },
       prestasi_akademik(bobot){
         let x = 0
@@ -349,7 +344,6 @@
           x = 0
         }
         this.nilaiPerhitungan.prestasi_akademik = x * bobot / 100
-        console.log(this.nilaiPerhitungan.prestasi_akademik)
       },
       prestasi_non_akademik(bobot){
         let x = 0
@@ -365,23 +359,21 @@
           x = 0
         }
         this.nilaiPerhitungan.prestasi_non_akademik = x * bobot / 100
-        console.log(this.nilaiPerhitungan.prestasi_non_akademik)
       },
       rerata_raport(bobot){
         let x = 0
         if(this.newStudent.rerata_raport >= 95 && this.newStudent.rerata_raport <= 100){
           x = 100
-        } else if (this.newStudent.rerata_raport >= 90 && this.newStudent.rerata_raport <= 94){
+        } else if (this.newStudent.rerata_raport >= 90 && this.newStudent.rerata_raport < 95){
           x = 75
-        } else if (this.newStudent.rerata_raport >= 85 && this.newStudent.rerata_raport <= 89){
+        } else if (this.newStudent.rerata_raport >= 85 && this.newStudent.rerata_raport < 90){
           x = 50
-        } else if (this.newStudent.rerata_raport >= 80 && this.newStudent.rerata_raport <= 84) {
+        } else if (this.newStudent.rerata_raport >= 80 && this.newStudent.rerata_raport < 85) {
           x = 25
         } else {
           x = 0
         }
         this.nilaiPerhitungan.rerata_raport = x * bobot / 100
-        console.log(this.nilaiPerhitungan.rerata_raport)
       },
       rerata_uas(bobot){
         let x = 0
@@ -389,15 +381,14 @@
           x = 100
         } else if (this.newStudent.rerata_uas >= 90 && this.newStudent.rerata_uas <= 94){
           x = 75
-        } else if (this.newStudent.rerata_uas >= 85 && this.newStudent.rerata_uas <= 89){
+        } else if (this.newStudent.rerata_uas >= 85 && this.newStudent.rerata_uas < 90){
           x = 50
-        } else if (this.newStudent.rerata_uas >= 80 && this.newStudent.rerata_uas <= 84) {
+        } else if (this.newStudent.rerata_uas >= 80 && this.newStudent.rerata_uas < 85) {
           x = 25
         } else {
           x = 0
         }
         this.nilaiPerhitungan.rerata_uas = x * bobot / 100
-        console.log(this.nilaiPerhitungan.rerata_uas)
       }
     }
   }
