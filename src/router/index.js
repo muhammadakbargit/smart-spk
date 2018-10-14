@@ -30,7 +30,7 @@ const router = new Router({
       name: 'Register',
       component: Register,
       meta: {
-        requiresGuest: true
+        requiresAuth: true
       }
     },
     {
