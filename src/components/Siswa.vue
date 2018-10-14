@@ -9,7 +9,7 @@
                 <span class="title blue--text">Daftar Siswa</span>
               </v-flex>
               <v-flex xs6 md4>
-                <v-btn @click.native="dialog = !dialog" color="primary" dark>Add Student</v-btn>
+                <v-btn @click.native="addStudent" color="primary" dark>Add Student</v-btn>
               </v-flex>
               <v-flex xs12 md6>
                 <v-text-field
@@ -45,12 +45,18 @@
                     </v-icon>
                     <span>View Detail</span>
                     </v-tooltip>
-                    <v-icon class="pr-1" small>
+                    <!-- <v-tooltip bottom>
+                    <v-icon slot="activator" @click="editStudent(props.item)" class="pr-1" small>
                       edit
                     </v-icon>
-                    <v-icon small>
-                      delete
-                    </v-icon>
+                    <span>Edit Student</span>
+                    </v-tooltip> -->
+                    <v-tooltip bottom>
+                      <v-icon slot="activator" @click="deleteStudent(props.item)" small>
+                        delete
+                      </v-icon>
+                      <span>Delete student</span>
+                    </v-tooltip>
                   </td>
                 </tr>
               </template>
@@ -79,7 +85,7 @@
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
+          <v-toolbar-title>{{ title_dialog }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="save">Save</v-btn>
@@ -91,28 +97,28 @@
               <span class="subheading blue--text">Data Diri</span>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="nis" v-model="newStudent.nis" label="Nomor Induk Siswa" type="text"></v-text-field>
+              <v-text-field name="nis" v-model="editedStudent.nis" label="Nomor Induk Siswa" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="name" v-model="newStudent.name" label="Nama" type="text"></v-text-field>
+              <v-text-field name="name" v-model="editedStudent.name" label="Nama" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="place_born" v-model="newStudent.place_born" label="Tempat Lahir" type="text"></v-text-field>
+              <v-text-field name="place_born" v-model="editedStudent.place_born" label="Tempat Lahir" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="dob" v-model="newStudent.dob" label="Tanggal Lahir" type="text"></v-text-field>
+              <v-text-field name="dob" v-model="editedStudent.dob" label="Tanggal Lahir" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="class" v-model="newStudent.class" label="Kelas" type="text"></v-text-field>
+              <v-text-field name="class" v-model="editedStudent.class" label="Kelas" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="address" v-model="newStudent.address" label="Alamat" type="text"></v-text-field>
+              <v-text-field name="address" v-model="editedStudent.address" label="Alamat" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="parent_name" v-model="newStudent.parent_name" label="Nama Orang Tua" type="text"></v-text-field>
+              <v-text-field name="parent_name" v-model="editedStudent.parent_name" label="Nama Orang Tua" type="text"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field name="parent_phone_number" v-model="newStudent.parent_phone_number" label="No Hp Orang Tua" type="text"></v-text-field>
+              <v-text-field name="parent_phone_number" v-model="editedStudent.parent_phone_number" label="No Hp Orang Tua" type="text"></v-text-field>
             </v-flex>
           </v-layout>
         </v-container>
@@ -123,28 +129,28 @@
               <span class="subheading blue--text">Penilaian</span>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field label="Catatan Pelanggaran" v-model="newStudent.catatan_pelanggaran" type="number"></v-text-field>
+              <v-text-field label="Catatan Pelanggaran" v-model="editedStudent.catatan_pelanggaran" type="number"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-select :items="personalities" v-model="newStudent.kepribadian" label="Kepribadian"></v-select>
+              <v-select :items="personalities" v-model="editedStudent.kepribadian" label="Kepribadian"></v-select>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field label="Penghasilan Orang Tua" v-model="newStudent.penghasilan_ortu" type="number"></v-text-field>
+              <v-text-field label="Penghasilan Orang Tua" v-model="editedStudent.penghasilan_ortu" type="number"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field label="Persentase Kehadiran" v-model="newStudent.persentase_kehadiran" type="number"></v-text-field>
+              <v-text-field label="Persentase Kehadiran" v-model="editedStudent.persentase_kehadiran" type="number"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-select :items="awards" v-model="newStudent.prestasi_akademik" label="Prestasi Akademik"></v-select>
+              <v-select :items="awards" v-model="editedStudent.prestasi_akademik" label="Prestasi Akademik"></v-select>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-select :items="awards" v-model="newStudent.prestasi_non_akademik" label="Prestasi Non Akademik"></v-select>
+              <v-select :items="awards" v-model="editedStudent.prestasi_non_akademik" label="Prestasi Non Akademik"></v-select>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field label="Rata - Rata Nilai Raport" v-model="newStudent.rerata_raport" type="number"></v-text-field>
+              <v-text-field label="Rata - Rata Nilai Raport" v-model="editedStudent.rerata_raport" type="number"></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 d-flex>
-              <v-text-field label="Rata - Rata Nilai UAS" v-model="newStudent.rerata_uas" type="number"></v-text-field>
+              <v-text-field label="Rata - Rata Nilai UAS" v-model="editedStudent.rerata_uas" type="number"></v-text-field>
             </v-flex>
           </v-layout>
         </v-container>
@@ -160,6 +166,7 @@
       return {
         dialog: false,
         search: '',
+        title_dialog: 'Add Student',
         headers: [
           { text: 'NIS', value: 'nis' },
           { text: 'Nama', value: 'name' },
@@ -173,7 +180,7 @@
         ],
         awards: ['Tidak Ada', 'Kecamatan', 'Kabupaten', 'Provinsi', 'Nasional/Internasional'],
         personalities: ['Kurang', 'Cukup', 'Baik', 'Sangat Baik'],
-        newStudent: {
+        editedStudent: {
           nis: '',
           name: '',
           place_born: '',
@@ -217,25 +224,105 @@
       }
     },
     methods: {
+      deleteStudent(student){
+        if(confirm('Are you sure to delete this student')){
+          fb.alternativesCollection.where('student', '==', student.id).get().then(snapshot => {
+            snapshot.forEach(doc => {
+              doc.ref.delete()
+              fb.studentsCollection.doc(siswa.id).delete()
+            })
+          })
+        }
+      },
+      addStudent(){
+        this.title_dialog = 'Add Student'
+        this.editedStudent = Object.assign({}, {})
+        this.dialog = true
+      },
+      editStudent(student){
+        this.title_dialog = 'Edit Student'
+        this.editedStudent = Object.assign({}, student)
+        this.dialog = true
+      },
+      update(student){
+        fb.studentsCollection.doc(student.id).update({
+          nis: this.editedStudent.nis,
+          name: this.editedStudent.name,
+          class: this.editedStudent.class,
+          address: this.editedStudent.address,
+          place_born: this.editedStudent.place_born,
+          dob: this.editedStudent.dob,
+          parent_name: this.editedStudent.parent_name,
+          parent_phone_number: this.editedStudent.parent_phone_number,
+
+          catatan_pelanggaran: this.editedStudent.catatan_pelanggaran,
+          kepribadian: this.editedStudent.kepribadian,
+          prestasi_akademik: this.editedStudent.prestasi_akademik,
+          prestasi_non_akademik: this.editedStudent.prestasi_non_akademik,
+          penghasilan_ortu: this.editedStudent.penghasilan_ortu,
+          persentase_kehadiran: this.editedStudent.persentase_kehadiran,
+          rerata_raport: this.editedStudent.rerata_raport,
+          rerata_uas: this.editedStudent.rerata_uas,
+        }).then(() => {
+          this.prosesEdit_criterias()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
+      prosesEdit_criterias(student_id){
+        this.criterias.forEach(value => {
+          switch (value.name) {
+            case 'Catatan Pelanggaran':
+              this.catatan_pelanggaran(value.bobot)
+              break;
+            case 'Kepribadian':
+              this.kepribadian(value.bobot)
+              break;
+            case 'Penghasilan Orang Tua':
+              this.penghasilan_ortu(value.bobot)
+              break;
+            case 'Persentase Kehadiran':
+              this.persentase_kehadiran(value.bobot)
+              break;
+            case 'Prestasi Akademik':
+              this.prestasi_akademik(value.bobot)
+              break;
+            case 'Prestasi Non Akademik':
+              this.prestasi_non_akademik(value.bobot)
+              break;
+            case 'Rata - Rata Nilai Raport':
+              this.rerata_raport(value.bobot)
+              break;
+            case 'Rata - Rata Nilai UAS':
+              this.rerata_uas(value.bobot)
+              break;
+            default:
+              break; 
+          }
+        });
+        var final_value = this.nilaiPerhitungan.catatan_pelanggaran + this.nilaiPerhitungan.kepribadian + this.nilaiPerhitungan.persentase_kehadiran + this.nilaiPerhitungan.penghasilan_ortu + this.nilaiPerhitungan.prestasi_akademik + this.nilaiPerhitungan.prestasi_non_akademik + this.nilaiPerhitungan.rerata_raport + this.nilaiPerhitungan.rerata_uas
+        console.log(final_value)
+      },
       save(){
         fb.studentsCollection.add({
-          nis: this.newStudent.nis,
-          name: this.newStudent.name,
-          class: this.newStudent.class,
-          address: this.newStudent.address,
-          place_born: this.newStudent.place_born,
-          dob: this.newStudent.dob,
-          parent_name: this.newStudent.parent_name,
-          parent_phone_number: this.newStudent.parent_phone_number,
+          nis: this.editedStudent.nis,
+          name: this.editedStudent.name,
+          class: this.editedStudent.class,
+          address: this.editedStudent.address,
+          place_born: this.editedStudent.place_born,
+          dob: this.editedStudent.dob,
+          parent_name: this.editedStudent.parent_name,
+          parent_phone_number: this.editedStudent.parent_phone_number,
 
-          catatan_pelanggaran: this.newStudent.catatan_pelanggaran,
-          kepribadian: this.newStudent.kepribadian,
-          prestasi_akademik: this.newStudent.prestasi_akademik,
-          prestasi_non_akademik: this.newStudent.prestasi_non_akademik,
-          penghasilan_ortu: this.newStudent.penghasilan_ortu,
-          persentase_kehadiran: this.newStudent.persentase_kehadiran,
-          rerata_raport: this.newStudent.rerata_raport,
-          rerata_uas: this.newStudent.rerata_uas,
+          catatan_pelanggaran: this.editedStudent.catatan_pelanggaran,
+          kepribadian: this.editedStudent.kepribadian,
+          prestasi_akademik: this.editedStudent.prestasi_akademik,
+          prestasi_non_akademik: this.editedStudent.prestasi_non_akademik,
+          penghasilan_ortu: this.editedStudent.penghasilan_ortu,
+          persentase_kehadiran: this.editedStudent.persentase_kehadiran,
+          rerata_raport: this.editedStudent.rerata_raport,
+          rerata_uas: this.editedStudent.rerata_uas,
         }).then(ref => {
           this.proses_criterias(ref.id)
         }).catch(err => {
@@ -277,16 +364,16 @@
         var final_value = this.nilaiPerhitungan.catatan_pelanggaran + this.nilaiPerhitungan.kepribadian + this.nilaiPerhitungan.persentase_kehadiran + this.nilaiPerhitungan.penghasilan_ortu + this.nilaiPerhitungan.prestasi_akademik + this.nilaiPerhitungan.prestasi_non_akademik + this.nilaiPerhitungan.rerata_raport + this.nilaiPerhitungan.rerata_uas
         fb.alternativesCollection.add({
           final_value: final_value,
-          student: fb.db.doc(`/students/${student_id}`)
+          student: student_id
         })
       },
       catatan_pelanggaran(bobot){
         var x = 0
-        if(this.newStudent.catatan_pelanggaran >= 75 && this.newStudent.catatan_pelanggaran <= 100){
+        if(this.editedStudent.catatan_pelanggaran >= 75 && this.editedStudent.catatan_pelanggaran <= 100){
           x = 0
-        } else if (this.newStudent.catatan_pelanggaran >= 50 && this.newStudent.catatan_pelanggaran < 75){
+        } else if (this.editedStudent.catatan_pelanggaran >= 50 && this.editedStudent.catatan_pelanggaran < 75){
           x = 25
-        } else if (this.newStudent.catatan_pelanggaran >= 25 && this.newStudent.catatan_pelanggaran < 50){
+        } else if (this.editedStudent.catatan_pelanggaran >= 25 && this.editedStudent.catatan_pelanggaran < 50){
           x = 75
         } else {
           x = 100
@@ -295,11 +382,11 @@
       },
       kepribadian(bobot){
         let x = 0
-        if(this.newStudent.kepribadian == 'Sangat Baik'){
+        if(this.editedStudent.kepribadian == 'Sangat Baik'){
           x = 100
-        } else if (this.newStudent.kepribadian == 'Baik'){
+        } else if (this.editedStudent.kepribadian == 'Baik'){
           x = 75
-        } else if (this.newStudent.kepribadian == 'Cukup'){
+        } else if (this.editedStudent.kepribadian == 'Cukup'){
           x = 25
         } else {
           x = 0
@@ -308,11 +395,11 @@
       },
       penghasilan_ortu(bobot){
         let x = 0
-        if(this.newStudent.penghasilan_ortu > 10000000){
+        if(this.editedStudent.penghasilan_ortu > 10000000){
           x = 0
-        } else if (this.newStudent.penghasilan_ortu >= 5000000 && this.newStudent.penghasilan_ortu < 10000000){
+        } else if (this.editedStudent.penghasilan_ortu >= 5000000 && this.editedStudent.penghasilan_ortu < 10000000){
           x = 25
-        } else if (this.newStudent.penghasilan_ortu >= 2000000 && this.newStudent.penghasilan_ortu < 5000000){
+        } else if (this.editedStudent.penghasilan_ortu >= 2000000 && this.editedStudent.penghasilan_ortu < 5000000){
           x = 75
         } else {
           x = 100
@@ -321,9 +408,9 @@
       },
       persentase_kehadiran(bobot){
         let x = 0
-        if(this.newStudent.persentase_kehadiran >= 95 && this.newStudent.persentase_kehadiran <= 100){
+        if(this.editedStudent.persentase_kehadiran >= 95 && this.editedStudent.persentase_kehadiran <= 100){
           x = 100
-        } else if (this.newStudent.persentase_kehadiran >= 80 && this.newStudent.persentase_kehadiran < 95){
+        } else if (this.editedStudent.persentase_kehadiran >= 80 && this.editedStudent.persentase_kehadiran < 95){
           x = 50
         } else {
           x = 0
@@ -332,13 +419,13 @@
       },
       prestasi_akademik(bobot){
         let x = 0
-        if(this.newStudent.prestasi_akademik == 'Nasional/Internasional'){
+        if(this.editedStudent.prestasi_akademik == 'Nasional/Internasional'){
           x = 100
-        } else if (this.newStudent.prestasi_akademik == 'Provinsi'){
+        } else if (this.editedStudent.prestasi_akademik == 'Provinsi'){
           x = 75
-        } else if (this.newStudent.prestasi_akademik == 'Kabupaten'){
+        } else if (this.editedStudent.prestasi_akademik == 'Kabupaten'){
           x = 50
-        } else if (this.newStudent.prestasi_akademik == 'Kecamatan') {
+        } else if (this.editedStudent.prestasi_akademik == 'Kecamatan') {
           x = 25
         } else {
           x = 0
@@ -347,13 +434,13 @@
       },
       prestasi_non_akademik(bobot){
         let x = 0
-        if(this.newStudent.prestasi_non_akademik == 'Nasional/Internasional'){
+        if(this.editedStudent.prestasi_non_akademik == 'Nasional/Internasional'){
           x = 100
-        } else if (this.newStudent.prestasi_non_akademik == 'Provinsi'){
+        } else if (this.editedStudent.prestasi_non_akademik == 'Provinsi'){
           x = 75
-        } else if (this.newStudent.prestasi_non_akademik == 'Kabupaten'){
+        } else if (this.editedStudent.prestasi_non_akademik == 'Kabupaten'){
           x = 50
-        } else if (this.newStudent.prestasi_non_akademik == 'Kecamatan') {
+        } else if (this.editedStudent.prestasi_non_akademik == 'Kecamatan') {
           x = 25
         } else {
           x = 0
@@ -362,13 +449,13 @@
       },
       rerata_raport(bobot){
         let x = 0
-        if(this.newStudent.rerata_raport >= 95 && this.newStudent.rerata_raport <= 100){
+        if(this.editedStudent.rerata_raport >= 95 && this.editedStudent.rerata_raport <= 100){
           x = 100
-        } else if (this.newStudent.rerata_raport >= 90 && this.newStudent.rerata_raport < 95){
+        } else if (this.editedStudent.rerata_raport >= 90 && this.editedStudent.rerata_raport < 95){
           x = 75
-        } else if (this.newStudent.rerata_raport >= 85 && this.newStudent.rerata_raport < 90){
+        } else if (this.editedStudent.rerata_raport >= 85 && this.editedStudent.rerata_raport < 90){
           x = 50
-        } else if (this.newStudent.rerata_raport >= 80 && this.newStudent.rerata_raport < 85) {
+        } else if (this.editedStudent.rerata_raport >= 80 && this.editedStudent.rerata_raport < 85) {
           x = 25
         } else {
           x = 0
@@ -377,13 +464,13 @@
       },
       rerata_uas(bobot){
         let x = 0
-        if(this.newStudent.rerata_uas >= 95 && this.newStudent.rerata_uas <= 100){
+        if(this.editedStudent.rerata_uas >= 95 && this.editedStudent.rerata_uas <= 100){
           x = 100
-        } else if (this.newStudent.rerata_uas >= 90 && this.newStudent.rerata_uas <= 94){
+        } else if (this.editedStudent.rerata_uas >= 90 && this.editedStudent.rerata_uas <= 94){
           x = 75
-        } else if (this.newStudent.rerata_uas >= 85 && this.newStudent.rerata_uas < 90){
+        } else if (this.editedStudent.rerata_uas >= 85 && this.editedStudent.rerata_uas < 90){
           x = 50
-        } else if (this.newStudent.rerata_uas >= 80 && this.newStudent.rerata_uas < 85) {
+        } else if (this.editedStudent.rerata_uas >= 80 && this.editedStudent.rerata_uas < 85) {
           x = 25
         } else {
           x = 0

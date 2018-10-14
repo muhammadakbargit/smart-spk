@@ -143,7 +143,7 @@ export const store = new Vuex.Store({
       fb.alternativesCollection.orderBy('final_value', 'desc').get().then((querySnapshot) => {
         const alternatives = []
         querySnapshot.forEach((alternatif) => {
-          fb.studentsCollection.doc(alternatif.data().student.id).get().then((student) => {
+          fb.studentsCollection.doc(alternatif.data().student).get().then((student) => {
             alternatives.push({ id:  alternatif.id, final_value: alternatif.data().final_value, student: student.data()})
           })
         })

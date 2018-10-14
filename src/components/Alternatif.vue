@@ -18,14 +18,6 @@
                   <td class="text-xs-left">{{ props.item.student.nis }}</td>
                   <td class="text-xs-left">{{ props.item.student.name }}</td>
                   <td class="text-xs-center">{{ props.item.final_value }}</td>
-                  <td class="text-xs-center">
-                    <v-icon small class="pr-2">
-                      edit
-                    </v-icon>
-                    <v-icon small class="pr-2">
-                      delete
-                    </v-icon>
-                  </td>
                 </tr>
               </template>
             </v-data-table>
@@ -46,7 +38,6 @@
           { text: 'NIS', sortable: false, align: 'left', value: 'student.nis' },
           { text: 'Nama Siswa', sortable: false, align: 'left', value: 'student.name' },
           { text: 'Nilai Akhir', align: 'center', sortable: false, value: 'final_value' },
-          { text: 'Aksi', align: 'center', sortable: false, value: '' },
         ],
       }
     },
