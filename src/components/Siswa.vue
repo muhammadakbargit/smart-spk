@@ -45,12 +45,12 @@
                     </v-icon>
                     <span>View Detail</span>
                     </v-tooltip>
-                    <!-- <v-tooltip bottom>
+                    <v-tooltip bottom>
                     <v-icon slot="activator" @click="editStudent(props.item)" class="pr-1" small>
                       edit
                     </v-icon>
                     <span>Edit Student</span>
-                    </v-tooltip> -->
+                    </v-tooltip>
                     <v-tooltip bottom>
                       <v-icon slot="activator" @click="deleteStudent(props.item)" small>
                         delete
@@ -82,13 +82,13 @@
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="blue" flat>
-          <v-btn icon dark @click.native="dialog = false">
+          <v-btn icon dark @click.native="closeDialog">
             <v-icon>close</v-icon>
           </v-btn>
           <v-toolbar-title>{{ title_dialog }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="save">Save</v-btn>
+            <v-btn dark flat @click.native="title_dialog == 'Add Student' ? save : update(student_id)">Save</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container grid-list-md fluid>
@@ -199,6 +199,25 @@
           rerata_raport: 0,
           rerata_uas: 0
         },
+        defaulteditedStudent: {
+          nis: '',
+          name: '',
+          place_born: '',
+          dob: '',
+          class: '',
+          address: '',
+          parent_name: '',
+          parent_phone_number: '',
+
+          catatan_pelanggaran: 0,
+          kepribadian: '',
+          penghasilan_ortu: 0,
+          persentase_kehadiran: 0,
+          prestasi_akademik: '',
+          prestasi_non_akademik: '',
+          rerata_raport: 0,
+          rerata_uas: 0
+        },
         nilaiPerhitungan: {
           catatan_pelanggaran : 0,
           kepribadian : 0,
@@ -208,7 +227,18 @@
           prestasi_non_akademik : 0,
           rerata_raport : 0,
           rerata_uas : 0,
-        }
+        },
+        defaultnilaiPerhitungan: {
+          catatan_pelanggaran : 0,
+          kepribadian : 0,
+          penghasilan_ortu : 0,
+          persentase_kehadiran : 0,
+          prestasi_akademik : 0,
+          prestasi_non_akademik : 0,
+          rerata_raport : 0,
+          rerata_uas : 0,
+        },
+        student_id: ''
       }
     },
     created(){
@@ -242,10 +272,11 @@
       editStudent(student){
         this.title_dialog = 'Edit Student'
         this.editedStudent = Object.assign({}, student)
+        this.student_id = student.id
         this.dialog = true
       },
-      update(student){
-        fb.studentsCollection.doc(student.id).update({
+      update(student_id){
+        fb.studentsCollection.doc(student_id).update({
           nis: this.editedStudent.nis,
           name: this.editedStudent.name,
           class: this.editedStudent.class,
@@ -269,6 +300,7 @@
         .catch(err => {
           console.log(err)
         })
+        this.closeDialog()
       },
       prosesEdit_criterias(student_id){
         this.criterias.forEach(value => {
@@ -302,7 +334,22 @@
           }
         });
         var final_value = this.nilaiPerhitungan.catatan_pelanggaran + this.nilaiPerhitungan.kepribadian + this.nilaiPerhitungan.persentase_kehadiran + this.nilaiPerhitungan.penghasilan_ortu + this.nilaiPerhitungan.prestasi_akademik + this.nilaiPerhitungan.prestasi_non_akademik + this.nilaiPerhitungan.rerata_raport + this.nilaiPerhitungan.rerata_uas
-        console.log(final_value)
+        fb.alternativesCollection.where('student', '==', this.student_id).get().then(snapshot => {
+          snapshot.forEach(doc => {
+            doc.ref.update({
+              final_value: final_value
+            })
+          })
+        })
+
+        fb.rankingsCollection.where('student', '==', this.student_id).get().then(snapshot => {
+          snapshot.forEach(doc => {
+            doc.ref.update({
+              final_value: final_value
+            })
+          })
+        })
+
       },
       save(){
         fb.studentsCollection.add({
@@ -328,6 +375,12 @@
         }).catch(err => {
           console.log(err)
         })
+        this.closeDialog()
+      },
+      closeDialog(){
+        this.editedStudent = this.defaulteditedStudent
+        this.nilaiPerhitungan = this.defaultnilaiPerhitungan
+        this.student_id = ''
         this.dialog = false
       },
       proses_criterias(student_id){
