@@ -27,6 +27,7 @@ const usersCollection = db.collection('users')
 const criteriasCollection = db.collection('criterias')
 const studentsCollection = db.collection('students')
 const alternativesCollection = db.collection('alternatives')
+const rankingsCollection = db.collection('rankings')
 
 export {
   db,
@@ -35,5 +36,6 @@ export {
   usersCollection,
   criteriasCollection,
   studentsCollection,
-  alternativesCollection
+  alternativesCollection,
+  rankingsCollection
 }

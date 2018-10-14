@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
       <v-layout align-start>
         <v-flex>
-          <h3 class="display-3">Dashboard</h3>
+          <span class="title blue--text">Selamat Datang di Dashboard SPK-Smart</span>
         </v-flex>
       </v-layout>
     </v-container>

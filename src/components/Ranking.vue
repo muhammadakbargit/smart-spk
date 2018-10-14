@@ -9,7 +9,7 @@
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="alternatives"
+              :items="rankings"
               :rows-per-page-items="rows_per_items"
               item-key="id"
             >
@@ -44,11 +44,11 @@
       }
     },
     created(){
-      this.$store.dispatch('fetchAlternatives')
+      this.$store.dispatch('fetchRankings')
     },
     computed: {
-      alternatives(){
-        return this.$store.getters.alternatives
+      rankings(){
+        return this.$store.getters.rankings
       }
     }
   }

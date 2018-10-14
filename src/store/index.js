@@ -29,11 +29,11 @@ export const store = new Vuex.Store({
       { id: 7, icon: 'people', text: 'Siswa', link: '/siswa', auth: true },
       { id: 8, icon: 'view_list', text: 'Alternatif', link: '/alternatif', auth: true },
       { id: 9, icon: 'poll', text: 'Ranking', link: '/ranking', auth: true },
-      { id: 10, icon: 'assignment', text: 'Laporan', link: '/laporan', auth: true },
     ],
     criterias: [],
     students: [],
-    alternatives: []
+    alternatives: [],
+    rankings: []
   },
   mutations: {
     SET_LAYOUT(state, payload) {
@@ -53,6 +53,9 @@ export const store = new Vuex.Store({
     },
     SET_ALTERNATIVES(state, payload){
       state.alternatives = payload
+    },
+    SET_RANKINGS(state, payload){
+      state.rankings = payload
     }
   },
   getters: {
@@ -84,6 +87,9 @@ export const store = new Vuex.Store({
     },
     alternatives(state){
       return state.alternatives
+    },
+    rankings(state){
+      return state.rankings
     }
   },
   actions: {
@@ -148,6 +154,19 @@ export const store = new Vuex.Store({
           })
         })
         commit('SET_ALTERNATIVES', alternatives)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    fetchRankings({commit}){
+      fb.rankingsCollection.orderBy('final_value', 'desc').get().then((querySnapshot) => {
+        const rankings = []
+        querySnapshot.forEach((ranking) => {
+          fb.studentsCollection.doc(ranking.data().student).get().then((student) => {
+            rankings.push({ id:  ranking.id, final_value: ranking.data().final_value, student: student.data()})
+          })
+        })
+        commit('SET_RANKINGS', rankings)
       }).catch(err => {
         console.log(err)
       })

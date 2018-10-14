@@ -9,7 +9,6 @@ import Information from '@/components/Information'
 import Dashboard from '@/components/Dashboard'
 import Criteria from '@/components/Criteria'
 import Alternatif from '@/components/Alternatif'
-import Laporan from '@/components/Laporan'
 import Ranking from '@/components/Ranking'
 import Siswa from '@/components/Siswa'
 
@@ -86,14 +85,6 @@ const router = new Router({
       path: '/ranking',
       name: 'Ranking',
       component: Ranking,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/laporan',
-      name: 'Laporan',
-      component: Laporan,
       meta: {
         requiresAuth: true
       }

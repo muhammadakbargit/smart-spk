@@ -366,6 +366,10 @@
           final_value: final_value,
           student: student_id
         })
+        fb.rankingsCollection.add({
+          final_value: final_value,
+          student: student_id
+        })
       },
       catatan_pelanggaran(bobot){
         var x = 0
