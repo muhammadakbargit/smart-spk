@@ -88,7 +88,7 @@
           <v-toolbar-title>{{ title_dialog }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="title_dialog == 'Add Student' ? save : update(student_id)">Save</v-btn>
+            <v-btn dark flat @click.native="title_dialog == 'Add Student' ? save() : update(student_id)">Save</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container grid-list-md fluid>
@@ -259,7 +259,7 @@
           fb.alternativesCollection.where('student', '==', student.id).get().then(snapshot => {
             snapshot.forEach(doc => {
               doc.ref.delete()
-              fb.studentsCollection.doc(siswa.id).delete()
+              fb.studentsCollection.doc(student.id).delete()
             })
           })
         }
