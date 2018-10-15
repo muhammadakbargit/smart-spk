@@ -167,6 +167,7 @@ export const store = new Vuex.Store({
           })
         })
         commit('SET_RANKINGS', rankings)
+        console.log(rankings)
       }).catch(err => {
         console.log(err)
       })

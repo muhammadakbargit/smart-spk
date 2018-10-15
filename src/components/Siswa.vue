@@ -295,12 +295,12 @@
           rerata_raport: this.editedStudent.rerata_raport,
           rerata_uas: this.editedStudent.rerata_uas,
         }).then(() => {
-          this.prosesEdit_criterias()
+          this.prosesEdit_criterias(student_id)
+          this.closeDialog()
         })
         .catch(err => {
           console.log(err)
         })
-        this.closeDialog()
       },
       prosesEdit_criterias(student_id){
         this.criterias.forEach(value => {
@@ -349,6 +349,7 @@
             })
           })
         })
+        console.log(final_value)
 
       },
       save(){
@@ -372,14 +373,14 @@
           rerata_uas: this.editedStudent.rerata_uas,
         }).then(ref => {
           this.proses_criterias(ref.id)
+          this.closeDialog(0)
         }).catch(err => {
           console.log(err)
         })
-        this.closeDialog()
       },
       closeDialog(){
-        this.editedStudent = this.defaulteditedStudent
-        this.nilaiPerhitungan = this.defaultnilaiPerhitungan
+        // this.editedStudent = this.defaulteditedStudent
+        // this.nilaiPerhitungan = this.defaultnilaiPerhitungan
         this.student_id = ''
         this.dialog = false
       },
@@ -436,6 +437,7 @@
           x = 100
         }
         this.nilaiPerhitungan.catatan_pelanggaran = x * bobot / 100
+        console.log('catatan pelanggaran : ' + this.nilaiPerhitungan.catatan_pelanggaran)
       },
       kepribadian(bobot){
         let x = 0
@@ -449,6 +451,7 @@
           x = 0
         }
         this.nilaiPerhitungan.kepribadian = x * bobot / 100
+        console.log('kepribadian : ' + this.nilaiPerhitungan.kepribadian)
       },
       penghasilan_ortu(bobot){
         let x = 0
@@ -462,6 +465,7 @@
           x = 100
         }
         this.nilaiPerhitungan.penghasilan_ortu = x * bobot / 100
+        console.log('Penghasilan Ortu : ' + this.nilaiPerhitungan.penghasilan_ortu)
       },
       persentase_kehadiran(bobot){
         let x = 0
@@ -473,6 +477,7 @@
           x = 0
         }
         this.nilaiPerhitungan.persentase_kehadiran = x * bobot / 100
+        console.log('persentase kehadiran : ' + this.nilaiPerhitungan.persentase_kehadiran)
       },
       prestasi_akademik(bobot){
         let x = 0
@@ -488,6 +493,8 @@
           x = 0
         }
         this.nilaiPerhitungan.prestasi_akademik = x * bobot / 100
+        console.log('akademik : ' + this.nilaiPerhitungan.prestasi_akademik)
+
       },
       prestasi_non_akademik(bobot){
         let x = 0
@@ -503,6 +510,7 @@
           x = 0
         }
         this.nilaiPerhitungan.prestasi_non_akademik = x * bobot / 100
+        console.log('non akademik : ' + this.nilaiPerhitungan.prestasi_non_akademik)
       },
       rerata_raport(bobot){
         let x = 0
@@ -518,6 +526,7 @@
           x = 0
         }
         this.nilaiPerhitungan.rerata_raport = x * bobot / 100
+        console.log('Raport : ' + this.nilaiPerhitungan.rerata_raport)
       },
       rerata_uas(bobot){
         let x = 0
@@ -533,6 +542,7 @@
           x = 0
         }
         this.nilaiPerhitungan.rerata_uas = x * bobot / 100
+        console.log('uas : ' + this.nilaiPerhitungan.rerata_uas)
       }
     }
   }
